@@ -1,0 +1,5 @@
+version = "0.1.0"
+description = "ctypes axTLS bindings"
+archive(byte) = "axtls.cma"
+archive(native) = "axtls.cmxa"
+exists_if = "axtls.cma"
