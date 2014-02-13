@@ -20,7 +20,8 @@ open Foreign
 
 open Axtls
 
-let ssl_func = funptr (void @-> returning (ptr void))
+type ssl_func = unit -> unit ptr
+let ssl_func : ssl_func typ = funptr (void @-> returning (ptr void))
 
 let ssl_library_init =
   let c = foreign "SSL_library_init" (void @-> returning int) in

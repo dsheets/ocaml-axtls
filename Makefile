@@ -10,9 +10,10 @@ CFLAGS=-fPIC -Wall -Wextra -Werror -std=c99
 
 build:
 	mkdir -p $(BUILD)
-		ocamlfind ocamlc -o $(BUILD)/axtls.cmi $(FLAGS) -c lib/axtls.ml \
-#ocamlfind ocamlc -o $(BUILD)/$(MOD_NAME).cmi -I $(BUILD) -I lib \
-#		$(FLAGS) -c $(SRC)/$(MOD_NAME).mli
+	ocamlfind ocamlc -o $(BUILD)/axtls.cmi -I $(BUILD) -I $(SRC) \
+		$(FLAGS) -c $(SRC)/axtls.mli
+	ocamlfind ocamlc -o $(BUILD)/axtls_openssl.cmi -I $(BUILD) -I $(SRC) \
+		$(FLAGS) -c $(SRC)/axtls_openssl.mli
 	ocamlfind ocamlmklib -o $(BUILD)/axtls -I $(BUILD) \
 		$(FLAGS) $(SRC)/axtls.ml $(SRC)/axtls_openssl.ml
 
@@ -22,8 +23,10 @@ META: META.in
 
 install: META
 	ocamlfind install $(FINDLIB_NAME) META \
-#$(SRC)/$(MOD_NAME).mli
-#$(BUILD)/$(MOD_NAME).cmi
+		$(SRC)/axtls.mli \
+		$(BUILD)/axtls.cmi \
+		$(SRC)/axtls_openssl.mli \
+		$(BUILD)/axtls_openssl.cmi \
 		$(BUILD)/axtls.cma \
 		$(BUILD)/axtls.cmxa
 

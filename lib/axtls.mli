@@ -16,13 +16,12 @@
  *)
 
 open Ctypes
-open Foreign
 
-type ssl_ctx_p = unit ptr
-let ssl_ctx_p : ssl_ctx_p typ = ptr void
+type ssl_ctx_p
+val ssl_ctx_p : ssl_ctx_p typ
 
-type ssl_p = unit ptr
-let ssl_p : ssl_p typ = ptr void
+type ssl_p
+val ssl_p : ssl_p typ
 
-type ssl_session_p = unit ptr
-let ssl_session_p : ssl_session_p typ = ptr void
+type ssl_session_p
+val ssl_session_p : ssl_session_p typ
