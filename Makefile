@@ -3,8 +3,8 @@
 FINDLIB_NAME=axtls
 BUILD=_build/lib
 SRC=lib
-FLAGS=-package ctypes.foreign -package fd-send-recv
-EXTRA_META=requires = \"ctypes.foreign\"
+FLAGS=-package ctypes.foreign -package fd-send-recv -package tls-types
+EXTRA_META=requires = \"ctypes.foreign fd-send-recv tls-types\"
 
 CFLAGS=-fPIC -Wall -Wextra -Werror -std=c99
 
