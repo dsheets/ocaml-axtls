@@ -18,6 +18,8 @@
 open Ctypes
 open Foreign
 
+include Tls_types.Openssl_basic
+
 type ssl_method = unit -> unit ptr
 let ssl_method : ssl_method fn = void @-> returning (ptr void)
 
@@ -95,7 +97,6 @@ let ssl_ctx_ctrl =
   in
   fun ssl_ctx cmd larg parg -> c ssl_ctx cmd larg parg
 
-let verify_callback = funptr (int @-> ptr void @-> returning int)
 let ssl_ctx_set_verify =
   let c = foreign "SSL_CTX_set_verify"
     (ssl_ctx @-> int @-> verify_callback @-> returning void)
@@ -185,7 +186,7 @@ let ssl_shutdown =
   fun ssl -> c ssl
 
 let ssl_peek =
-  let c = foreign "ssleek" (ssl @-> ptr void @-> int @-> returning int) in
+  let c = foreign "SSL_peek" (ssl @-> ptr void @-> int @-> returning int) in
   fun ssl buf num -> c ssl buf num
 
 let ssl_set_bio =
@@ -225,9 +226,5 @@ let ssl_set_session =
   fun ssl session -> c ssl session
 
 let ssl_session_free =
-  let c = foreign "SSL_session_free" (ssl_session @-> returning void) in
+  let c = foreign "SSL_SESSION_free" (ssl_session @-> returning void) in
   fun session -> c session
-
-let sslv23_method =
-  let c = foreign "SSLv23_method" (void @-> returning void) in
-  fun () -> c ()
