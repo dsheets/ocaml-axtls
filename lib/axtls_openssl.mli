@@ -15,7 +15,11 @@
  *
  *)
 
-include Tls_types.OPENSSL_BASIC
- with type ssl_ctx     = Axtls.ssl_ctx_p
- and  type ssl         = Axtls.ssl_p
- and  type ssl_session = Axtls.ssl_session_p
+module type FOREIGN = Axtls_openssl_bindings.FOREIGN
+
+module type S = Axtls_openssl_bindings.S
+
+module Bindings : module type of Axtls_openssl_bindings.Make
+
+module Dynlink : S
+module Stubs : S

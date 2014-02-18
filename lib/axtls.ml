@@ -16,7 +16,6 @@
  *)
 
 open Ctypes
-open Foreign
 
 type ssl_ctx_p = unit ptr
 let ssl_ctx_p : ssl_ctx_p typ = ptr void

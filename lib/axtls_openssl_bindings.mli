@@ -15,16 +15,17 @@
  *
  *)
 
-module type FOREIGN = Axtls_openssl_bindings.FOREIGN
-module type S = Axtls_openssl_bindings.S
-module Bindings = Axtls_openssl_bindings.Make
+module type FOREIGN = sig
+  val foreign : string -> ('a -> 'b) Ctypes.fn -> ('a -> 'b)
+  val funptr : value:string -> typ:string ->
+    ('a -> 'b) Ctypes.fn -> ('a -> 'b) Ctypes.typ
 
-module Dynlink = Bindings(struct
-  let foreign name typ = Foreign.foreign name typ
-  let funptr ~value ~typ fn = Foreign.funptr fn
-end)
+  val appl_module : string
+end
 
-module Stubs = Bindings(struct
-  let foreign name _typ = Axtls_openssl_stubs_generated.find name
-  let funptr ~value ~typ fn = Foreign.funptr fn (* TODO: never used? ok? *)
-end)
+module type S = Tls_types.OPENSSL_BASIC
+  with type ssl_ctx     = Axtls.ssl_ctx_p
+  and  type ssl         = Axtls.ssl_p
+  and  type ssl_session = Axtls.ssl_session_p
+
+module Make : functor (F : FOREIGN) -> S
