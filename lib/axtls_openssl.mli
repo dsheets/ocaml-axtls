@@ -15,11 +15,19 @@
  *
  *)
 
-module type FOREIGN = Axtls_openssl_bindings.FOREIGN
-
-module type S = Axtls_openssl_bindings.S
-
 module Bindings : module type of Axtls_openssl_bindings.Make
 
-module Dynlink : S
+module type S = Tls_types.Openssl.BASIC
+  with type ssl_ctx     = Axtls.ssl_ctx_p
+  and  type ssl         = Axtls.ssl_p
+  and  type ssl_session = Axtls.ssl_session_p
+module type C = Tls_types.Openssl.BASIC_C
+  with type 'a fn = 'a
+  and  type ssl_ctx     = Axtls.ssl_ctx_p
+  and  type ssl         = Axtls.ssl_p
+  and  type ssl_session = Axtls.ssl_session_p
+
+module Wrap : functor (C : C) -> S
+
+(* TODO: module Dynlink : S *)
 module Stubs : S

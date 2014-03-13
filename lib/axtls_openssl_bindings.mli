@@ -15,17 +15,9 @@
  *
  *)
 
-module type FOREIGN = sig
-  val foreign : string -> ('a -> 'b) Ctypes.fn -> ('a -> 'b)
-  val funptr : value:string -> typ:string ->
-    ('a -> 'b) Ctypes.fn -> ('a -> 'b) Ctypes.typ
-
-  val appl_module : string
-end
-
-module type S = Tls_types.OPENSSL_BASIC
+module type C = Tls_types.Openssl.BASIC_C
   with type ssl_ctx     = Axtls.ssl_ctx_p
   and  type ssl         = Axtls.ssl_p
   and  type ssl_session = Axtls.ssl_session_p
 
-module Make : functor (F : FOREIGN) -> S
+module Make : functor (F : Cstubs.FOREIGN) -> C with type 'a fn = 'a F.fn

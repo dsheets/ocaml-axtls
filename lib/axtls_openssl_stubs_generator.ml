@@ -19,25 +19,16 @@ let c_headers = "
 #include \"cstubs/cstubs_internals.h\"
 "
 
-let stub_prefix = "axtls_openssl_stub_"
+let prefix = "axtls_openssl_stub_"
 
 let main path =
-  let ml_out = open_out (path^"/axtls_openssl_stubs_generated.ml") in
+  let ml_out = open_out (path^"/axtls_openssl_stubs.ml") in
   let c_out  = open_out (path^"/axtls_openssl_stubs.c") in
   let ml_fmt = Format.formatter_of_out_channel ml_out in
   let c_fmt  = Format.formatter_of_out_channel c_out in
   Format.fprintf c_fmt "%s@\n" c_headers;
-  let module M = Axtls_openssl_bindings.Make(struct
-    let foreign cname fn =
-      let stub_name = stub_prefix ^ cname in
-      Cstubs.write_c  ~stub_name ~cname c_fmt fn;
-      Cstubs.write_ml ~stub_name ~external_name:stub_name ml_fmt fn;
-      Foreign.foreign cname fn (* TODO: necessary? *)
-    let funptr ~value ~typ fn =
-      let t = Foreign.funptr fn in
-      Cstubs.register_paths t ~value ~typ;
-      t (* TODO: never used? ok? *)
-  end) in
+  Cstubs.write_c  c_fmt  ~prefix (module Axtls_openssl_bindings.Make);
+  Cstubs.write_ml ml_fmt ~prefix (module Axtls_openssl_bindings.Make);
   Format.pp_print_flush ml_fmt ();
   Format.pp_print_flush c_fmt ();
   close_out ml_out;
